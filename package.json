@@ -14,7 +14,8 @@
     "react": "18.2.0",
     "react-bootstrap": "^2.8.0",
     "react-dom": "18.2.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "zod": "^3.22.2"
   },
   "devDependencies": {
     "@types/react": "18.0.25",
@@ -35,5 +36,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "resolutions": {
+    "@webiny/form@^5.37.3": "patch:@webiny/form@npm%3A5.37.3#./.yarn/patches/@webiny-form-npm-5.37.3-704689e0ed.patch"
+  }
 }

@@ -1,7 +1,9 @@
 import React from "react";
 import { Observer, observer } from "mobx-react-lite";
-import { Form } from "@webiny/form";
 import Row from "react-bootstrap/Row";
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import { Form, FormOnSubmit } from "@webiny/form";
 import { QueryBuilderPresenter } from "../adapters/QueryBuilderPresenter";
 import { QueryObjectDTO } from "../domain";
 import { FilterGroupControls } from "./FilterGroupControls";
@@ -13,35 +15,53 @@ interface QueryBuilderProps {
 }
 
 export const QueryBuilder = observer(({ presenter }: QueryBuilderProps) => {
-    const { queryObject } = presenter;
+    const viewModel = presenter.getViewModel();
 
     const onChange = (data: QueryObjectDTO) => {
         /**
          * With this, we're updating the Query Object with actual values from the form inputs.
          */
-        presenter.setQueryObject(data);
+        viewModel.setQueryObject(data);
+    };
+
+    const onSubmit: FormOnSubmit<QueryObjectDTO> = data => {
+        viewModel.onSubmit(
+            data,
+            () => {
+                console.log("Success!");
+                // Call Controller, or whatever...
+            },
+            () => {
+                console.log("Error!");
+            }
+        );
     };
 
     return (
         <div className={"query-builder"}>
             <h3>Query Builder</h3>
-            <Form data={queryObject} onChange={onChange}>
-                {() => (
+            <Form
+                data={viewModel.queryObject}
+                onChange={onChange}
+                onSubmit={onSubmit}
+                invalidFields={viewModel.invalidFields}
+            >
+                {({ form }) => (
                     <Observer>
                         {() => (
-                            <>
+                            <div>
                                 <FilterGroupControls
                                     name={"operation"}
-                                    onAddGroup={() => presenter.addGroup()}
+                                    onAddGroup={() => viewModel.addGroup()}
                                 />
-                                {queryObject.groups.map((group, groupIndex) => (
+                                {viewModel.queryObject.groups.map((group, groupIndex) => (
                                     <Row style={{ paddingLeft: 40 }} key={groupIndex}>
                                         <FilterGroup
                                             name={`groups.${groupIndex}`}
                                             onAddFilter={() =>
-                                                presenter.addNewFilterToGroup(groupIndex)
+                                                viewModel.addNewFilterToGroup(groupIndex)
                                             }
-                                            onDelete={() => presenter.deleteGroup(groupIndex)}
+                                            onDelete={() => viewModel.deleteGroup(groupIndex)}
                                         >
                                             {group.filters.map((filter, filterIndex) => (
                                                 <Filter
@@ -49,7 +69,7 @@ export const QueryBuilder = observer(({ presenter }: QueryBuilderProps) => {
                                                     name={`groups.${groupIndex}.filters.${filterIndex}`}
                                                     filter={filter}
                                                     onDelete={() => {
-                                                        presenter.deleteFilterFromGroup(
+                                                        viewModel.deleteFilterFromGroup(
                                                             groupIndex,
                                                             filterIndex
                                                         );
@@ -59,7 +79,12 @@ export const QueryBuilder = observer(({ presenter }: QueryBuilderProps) => {
                                         </FilterGroup>
                                     </Row>
                                 ))}
-                            </>
+                                <Row>
+                                    <Col xs={"auto"}>
+                                        <Button onClick={form.submit}>Apply</Button>
+                                    </Col>
+                                </Row>
+                            </div>
                         )}
                     </Observer>
                 )}

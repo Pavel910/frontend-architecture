@@ -1,0 +1,111 @@
+diff --git a/Form.js b/Form.js
+index 1ada06f5b50de99836753d34cd1e1d5af821bf21..a199e99e85ab805ab60b88bd3dc6d2aadac922f8 100644
+--- a/Form.js
++++ b/Form.js
+@@ -47,18 +47,18 @@ function useBind(props) {
+ // }
+ function FormInner(props, ref) {
+   var _useState = (0, _react.useState)({
+-      data: props.data,
+-      originalData: props.data || {},
+-      wasSubmitted: false,
+-      validation: {}
+-    }),
+-    _useState2 = (0, _slicedToArray2.default)(_useState, 2),
+-    state = _useState2[0],
+-    setState = _useState2[1];
++        data: props.data,
++        originalData: props.data || {},
++        wasSubmitted: false,
++        validation: {}
++      }),
++      _useState2 = (0, _slicedToArray2.default)(_useState, 2),
++      state = _useState2[0],
++      setState = _useState2[1];
+   var _useState3 = (0, _react.useState)(null),
+-    _useState4 = (0, _slicedToArray2.default)(_useState3, 2),
+-    prevData = _useState4[0],
+-    setPrevData = _useState4[1];
++      _useState4 = (0, _slicedToArray2.default)(_useState3, 2),
++      prevData = _useState4[0],
++      setPrevData = _useState4[1];
+ 
+   // This simulates "getDerivedStateFromProps"
+   if (props.data !== prevData) {
+@@ -76,27 +76,28 @@ function FormInner(props, ref) {
+         });
+       });
+     }
++  }
+ 
+-    // Check for validation errors
+-    var validation = (0, _cloneDeep.default)(state.validation);
+-    if ((0, _isPlainObject.default)(props.invalidFields) && Object.keys(props.invalidFields || {}).length) {
+-      (0, _each.default)(props.invalidFields, function (message, name) {
+-        validation = (0, _objectSpread6.default)((0, _objectSpread6.default)({}, validation), {}, (0, _defineProperty2.default)({}, name, {
+-          isValid: false,
+-          message: message
+-        }));
+-      });
+-    }
++  // Check for validation errors
++  var validation = (0, _cloneDeep.default)(state.validation);
++  if (props.invalidFields && Object.keys(props.invalidFields || {}).length) {
++    (0, _each.default)(props.invalidFields, function (message, name) {
++      validation = (0, _objectSpread6.default)((0, _objectSpread6.default)({}, validation), {}, (0, _defineProperty2.default)({}, name, {
++        isValid: false,
++        message: message
++      }));
++    });
++  }
+ 
+-    // Return new state only if something has changed
+-    if (!(0, _isEqual.default)(validation, state.validation)) {
+-      setState(function (state) {
+-        return (0, _objectSpread6.default)((0, _objectSpread6.default)({}, state), {}, {
+-          validation: validation
+-        });
++  // Set new state only if something has changed
++  if (!(0, _isEqual.default)(validation, state.validation)) {
++    setState(function (state) {
++      return (0, _objectSpread6.default)((0, _objectSpread6.default)({}, state), {}, {
++        validation: validation
+       });
+-    }
++    });
+   }
++
+   var inputs = (0, _react.useRef)({});
+   var afterChange = (0, _react.useRef)({});
+   var lastRender = (0, _react.useRef)([]);
+@@ -104,7 +105,7 @@ function FormInner(props, ref) {
+   var onChangeFns = (0, _react.useRef)({});
+   var getOnChangeFn = function getOnChangeFn(_ref) {
+     var name = _ref.name,
+-      beforeChange = _ref.beforeChange;
++        beforeChange = _ref.beforeChange;
+     if (!onChangeFns.current[name]) {
+       var linkStateChange = function linkStateChange(value) {
+         var inlineCallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _noop.default;
+@@ -425,7 +426,7 @@ function FormInner(props, ref) {
+   };
+   var __onKeyDown = function __onKeyDown(e) {
+     var _props$submitOnEnter = props.submitOnEnter,
+-      submitOnEnter = _props$submitOnEnter === void 0 ? false : _props$submitOnEnter;
++        submitOnEnter = _props$submitOnEnter === void 0 ? false : _props$submitOnEnter;
+     if ((submitOnEnter || e.metaKey || e.ctrlKey) && e.key === "Enter" && !e.isDefaultPrevented()) {
+       // Need to blur current target in case of input fields to trigger validation
+       // @ts-ignore
+@@ -460,9 +461,9 @@ function FormInner(props, ref) {
+   };
+   var createField = function createField(props) {
+     var name = props.name,
+-      defaultValue = props.defaultValue,
+-      beforeChange = props.beforeChange,
+-      afterChange = props.afterChange;
++        defaultValue = props.defaultValue,
++        beforeChange = props.beforeChange,
++        afterChange = props.afterChange;
+     var validators = props.validators || [];
+     /**
+      * If there is no validators defined, lets make it empty array.

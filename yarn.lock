@@ -3355,7 +3355,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@webiny/form@npm:^5.37.3":
+"@webiny/form@npm:5.37.3":
   version: 5.37.3
   resolution: "@webiny/form@npm:5.37.3"
   dependencies:
@@ -3365,6 +3365,19 @@ __metadata:
   peerDependencies:
     react: ^17.0.2
   checksum: f39291f994f549a8fe5c365745f4f7fee0d9226dbe5b2541c663d5b6c65235f46ca43c2a516866548a3b4fc1534875d3477907b12c2113131e31794a5fcfbcb5
+  languageName: node
+  linkType: hard
+
+"@webiny/form@patch:@webiny/form@npm%3A5.37.3#./.yarn/patches/@webiny-form-npm-5.37.3-704689e0ed.patch::locator=experiment-fe-architecture%40workspace%3A.":
+  version: 5.37.3
+  resolution: "@webiny/form@patch:@webiny/form@npm%3A5.37.3#./.yarn/patches/@webiny-form-npm-5.37.3-704689e0ed.patch::version=5.37.3&hash=f20bb7&locator=experiment-fe-architecture%40workspace%3A."
+  dependencies:
+    "@babel/runtime": 7.22.6
+    "@webiny/validation": 5.37.3
+    lodash: 4.17.21
+  peerDependencies:
+    react: ^17.0.2
+  checksum: 28d128914d5a828c9bfc83fb49e938a8375bd785993262e18b4691bef28b7da5bc188cf9830b725dfdc929ec462275b4d4a20a6a7719ce0ec59d2ed6dc20908b
   languageName: node
   linkType: hard
 
@@ -6139,6 +6152,7 @@ __metadata:
     react-dom: 18.2.0
     react-scripts: 5.0.1
     typescript: 4.4.2
+    zod: ^3.22.2
   languageName: unknown
   linkType: soft
 
@@ -13492,5 +13506,12 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: f77b3d8d00310def622123df93d4ee654fc6a0096182af8bd60679ddcdfb3474c56c6c7190817c84a2785648cdee9d721c0154eb45698c62176c322fb46fc700
+  languageName: node
+  linkType: hard
+
+"zod@npm:^3.22.2":
+  version: 3.22.2
+  resolution: "zod@npm:3.22.2"
+  checksum: 231e2180c8eabb56e88680d80baff5cf6cbe6d64df3c44c50ebe52f73081ecd0229b1c7215b9552537f537a36d9e36afac2737ddd86dc14e3519bdbc777e82b9
   languageName: node
   linkType: hard

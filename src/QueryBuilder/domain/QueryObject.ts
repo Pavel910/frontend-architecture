@@ -1,3 +1,4 @@
+import zod from "zod";
 import { FilterOperation } from "./FilterOperation";
 import { generateId } from "./generateId";
 
@@ -18,6 +19,26 @@ export interface QueryObjectDTO {
     operation: FilterOperation;
     groups: GroupDTO[];
 }
+
+const operationValidator = zod.enum(["AND", "OR"]);
+
+const filterValidationSchema = zod.object({
+    field: zod.string().trim().min(1),
+    condition: zod.string().trim().min(1),
+    value: zod.string().trim().min(1)
+});
+
+const groupValidationSchema = zod.object({
+    operation: operationValidator,
+    filters: zod.array(filterValidationSchema).min(1)
+});
+
+const validationSchema = zod.object({
+    id: zod.string().trim().optional().nullish(),
+    name: zod.string().trim(),
+    operation: operationValidator,
+    groups: zod.array(groupValidationSchema).min(1)
+});
 
 export class QueryObject {
     public readonly operations = FilterOperation;
@@ -44,6 +65,10 @@ export class QueryObject {
         return new QueryObject(FilterOperation.AND, [
             new Group(FilterOperation.AND, [new Filter()])
         ]);
+    }
+
+    static validate(data: QueryObjectDTO) {
+        return validationSchema.safeParse(data);
     }
 
     private constructor(operation: FilterOperation, groups: Group[], id?: string) {

@@ -1,20 +1,15 @@
-import { FilterOperation, QueryObjectDTO } from "../domain";
-import { action, makeObservable, observable } from "mobx";
+import { makeAutoObservable } from "mobx";
+import { FilterOperation, QueryObject, QueryObjectDTO } from "../domain";
 
 export class QueryBuilderViewModel {
     public queryObject: QueryObjectDTO;
+    public invalidFields: Record<string, { isValid: boolean; message: string }> = {};
+    private formWasSubmitted = false;
 
     constructor(queryObject: QueryObjectDTO) {
         this.queryObject = queryObject;
 
-        makeObservable(this, {
-            queryObject: observable.deep,
-            addNewFilterToGroup: action,
-            deleteFilterFromGroup: action,
-            addGroup: action,
-            deleteGroup: action,
-            setQueryObject: action
-        });
+        makeAutoObservable(this);
     }
 
     addNewFilterToGroup(groupIndex: number) {
@@ -54,5 +49,35 @@ export class QueryBuilderViewModel {
 
     setQueryObject(queryObject: QueryObjectDTO) {
         this.queryObject = queryObject;
+        if (this.formWasSubmitted) {
+            this.validateQueryObject(queryObject);
+        }
+    }
+
+    onSubmit(queryObject: QueryObjectDTO, onSuccess?: () => void, onError?: () => void) {
+        this.formWasSubmitted = true;
+        const result = this.validateQueryObject(queryObject);
+        if (result.success) {
+            onSuccess && onSuccess();
+        } else {
+            onError && onError();
+        }
+    }
+
+    private validateQueryObject(data: QueryObjectDTO) {
+        const validation = QueryObject.validate(data);
+
+        if (!validation.success) {
+            this.invalidFields = validation.error.issues.reduce((acc, issue) => {
+                return {
+                    ...acc,
+                    [issue.path.join(".")]: issue.message
+                };
+            }, {});
+        } else {
+            this.invalidFields = {};
+        }
+
+        return validation;
     }
 }
